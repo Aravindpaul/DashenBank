@@ -1,0 +1,44 @@
+
+
+CREATE COMPUTE MODULE insertDepartment_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		
+		CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+--		DECLARE I INTEGER 1;
+--		
+--		 DECLARE Inref REFERENCE TO InputRoot.JSON.Data.Request.Department;
+--		-- DECLARE dename CHARACTER SUBSTRING(Inref.DEPTNAME FROM 1 FOR 10);
+--		WHILE LASTMOVE(Inref) DO
+--		--INSERT INTO Database.DEPARTMENT(DEPTNO,DEPTNAME,MGRNO,ADMRDEPT,LOCATION) VALUES(Inref.DEPTNO,dename,Inref.MGRNO,Inref.ADMRDEPT,Inref.LOCATION); 
+--		INSERT INTO Database.Department (DEPTNO,DEPTNAME,MGRNO,ADMRDEPT,LOCATION ) VALUES(Inref.DEPTNO,SUBSTRING(Inref.DEPTNAME FROM 1 FOR 10),Inref.MGRNO,Inref.ADMRDEPT,Inref.LOCATION); 
+--		SET I = I+1;
+--		MOVE Inref NEXTSIBLING;
+--		END WHILE;
+--		IF SQLCODE = 0  THEN
+--			SET OutputRoot.JSON.Data.DepartmentResponse.DBResp.RowsAdded = I-1;
+--			--WHILE LASTMOVE(Inref) DO 
+--			SET OutputRoot.JSON.Data.DepartmentResponse.DBResp.Department.[] = Inref.[];
+--			--MOVE Inref NEXTSIBLING;
+--			--END WHILE;
+--		ELSE
+--			SET OutputRoot.JSON.Data.Response = 'Error occured';
+--		END IF;
+
+
+
+         DECLARE r1 ROW;
+		--DECLARE ref REFERENCE TO InputLocalEnvironment.HTTP.Input.QueryString;
+		--DECLARE p1 CHARACTER SUBSTRING(InputRoot.HTTPInputHeader."X-Query-String" AFTER '=');
+		--DECLARE p1 CHARACTER;
+		--SET p1 = InputRoot.JSON.Data.QueryString.DEPTNO; 
+		SET OutputRoot= InputRoot; 
+		DECLARE REFER REFERENCE TO InputRoot.JSON.Data.Response.values;
+			SET r1.values[] = SELECT * FROM Database.DEPARTMENT  AS  A WHERE A.DEPTNO =REFER.WORKDEPT  ;  
+			SET OutputRoot.JSON.Data.DBResp.Department = r1;
+
+	END;
+END MODULE;
