@@ -1,0 +1,14 @@
+
+
+CREATE COMPUTE MODULE GroupScatterFlow_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		--SET OutputRoot = InputRoot;
+		SET Environment.Destination.GroupScatter.Context=InputLocalEnvironment.Destination;
+		--SET OutputRoot.HTTPInputHeader=NULL;
+	END;
+END MODULE;

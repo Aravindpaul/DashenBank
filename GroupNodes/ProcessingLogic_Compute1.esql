@@ -1,0 +1,23 @@
+
+
+
+
+CREATE COMPUTE MODULE ProcessingLogic_Compute1
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		-- SET OutputRoot = InputRoot;
+		CREATE FIELD OutputRoot.JSON.Data.Flight;
+		DECLARE ref REFERENCE TO OutputRoot.JSON.Data.Flight;
+		SET ref.FlightName='Kingfisher Air Lines';
+		SET ref.Source='vizag';
+		SET ref.Destination='Hydrabad';
+		SET ref.SeatNo='A69';
+		SET ref.FlightTime='10:20 AM';
+		SET ref.Status='onTime';
+		SET ref.Duration='01:10';
+	END;
+END MODULE;
